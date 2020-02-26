@@ -38,5 +38,12 @@ public class StreamsStarterApp {
         wordCounts.toStream().to("word-count-output", Produced.with(Serdes.String(), Serdes.Long()));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
+        streams.start();
+
+        //printed the topology
+        System.out.println(streams.toString());
+
+        // shutdown hook to correctly close the streams application
+        Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
 }
